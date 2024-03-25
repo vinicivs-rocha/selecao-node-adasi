@@ -41,6 +41,48 @@ describe('App e2e', () => {
           .expectStatus(201)
           .expectJsonMatch({
             name: 'Cálculo I',
+          })
+          .stores('courseId', 'id');
+      });
+    });
+    describe('List courses', () => {
+      it('should list all courses', async () => {
+        return pactum
+          .spec()
+          .get('/courses')
+          .expectStatus(200)
+          .expectJsonMatch([
+            {
+              name: 'Cálculo I',
+            },
+          ]);
+      });
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum.spec().get('/courses/1').expectStatus(400).expectBody({
+          statusCode: 400,
+          message: 'Validation failed (uuid is expected)',
+          error: 'Bad Request',
+        });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .get('/courses/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Course with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should list the created course', async () => {
+        return pactum
+          .spec()
+          .get('/courses/$S{courseId}')
+          .expectStatus(200)
+          .expectJsonMatch({
+            name: 'Cálculo I',
           });
       });
     });
