@@ -32,20 +32,19 @@ export class CoursesService {
     return course;
   }
 
-  async update(id: string, updateCourseDto: UpdateCourseDto) {
+  async update(id: string, updateCourseDto: UpdateCourseDto): Promise<Course> {
     const course = await this.coursesRepository.findOneBy({ id });
     if (course === null)
       throw new NotFoundException(`Course with id ${id} does not exists`);
-    const updated = await this.coursesRepository.update(id, updateCourseDto);
-    if (updated.affected === 1) {
-      return {
-        ...course,
-        ...updateCourseDto,
-      };
-    }
+    await this.coursesRepository.update(id, updateCourseDto);
+
+    return {
+      ...course,
+      ...updateCourseDto,
+    };
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<{ id: string }> {
     const course = await this.coursesRepository.findOneBy({ id });
     if (course === null)
       throw new NotFoundException(`Course with id ${id} does not exists`);
