@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -37,10 +33,15 @@ export class CoursesService {
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
-    try {
-      return await this.coursesRepository.update(id, updateCourseDto);
-    } catch (error) {
-      throw new BadRequestException(`Course with id ${id} does not exists`);
+    const course = await this.coursesRepository.findOneBy({ id });
+    if (course === null)
+      throw new NotFoundException(`Course with id ${id} does not exists`);
+    const updated = await this.coursesRepository.update(id, updateCourseDto);
+    if (updated.affected === 1) {
+      return {
+        ...course,
+        ...updateCourseDto,
+      };
     }
   }
 
@@ -48,7 +49,7 @@ export class CoursesService {
     try {
       return await this.coursesRepository.delete(id);
     } catch (error) {
-      throw new BadRequestException(`Course with id ${id} does not exists`);
+      throw new NotFoundException(`Course with id ${id} does not exists`);
     }
   }
 }
