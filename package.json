@@ -21,10 +21,10 @@
     "orm:migrate": "npm run build && typeorm migration:run -d ./dist/src/data.source.js",
     "db:dev:up": "docker compose up dev-db -d",
     "db:dev:rm": "docker compose rm dev-db -s -f -v",
-    "db:dev:restart": "npm run db:dev:rm && npm run db:dev:up && sleep 1 && npm run orm:migrate",
+    "db:dev:restart": "npm run db:dev:rm && npm run db:dev:up && sleep 15 && npm run orm:migrate",
     "db:test:up": "docker compose up test-db -d",
     "db:test:rm": "docker compose rm test-db -s -f -v",
-    "db:test:restart": "npm run db:test:rm && npm run db:test:up && sleep 1 && DB_PORT=5435 npm run orm:migrate"
+    "db:test:restart": "npm run db:test:rm && npm run db:test:up && sleep 15 && DB_PORT=5435 npm run orm:migrate"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
