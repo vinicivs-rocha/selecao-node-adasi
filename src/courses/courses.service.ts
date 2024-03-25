@@ -46,10 +46,12 @@ export class CoursesService {
   }
 
   async remove(id: string) {
-    try {
-      return await this.coursesRepository.delete(id);
-    } catch (error) {
+    const course = await this.coursesRepository.findOneBy({ id });
+    if (course === null)
       throw new NotFoundException(`Course with id ${id} does not exists`);
-    }
+    await this.coursesRepository.delete(id);
+    return {
+      id,
+    };
   }
 }
