@@ -1,5 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Course } from './courses/entities/course.entity';
+import { Student } from './students/entities/student.entity';
 
 export const dataSourceOpts: DataSourceOptions = {
   type: 'postgres',
@@ -8,7 +9,7 @@ export const dataSourceOpts: DataSourceOptions = {
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'root',
   database: process.env.DB_NAME || 'school',
-  entities: [Course],
+  entities: [Course, Student],
   migrations: ['dist/migrations/*.js'],
   migrationsTableName: process.env.DB_MIGRATIONS_TABLE || 'migrations',
 };
