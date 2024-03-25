@@ -86,5 +86,39 @@ describe('App e2e', () => {
           });
       });
     });
+    describe('Update courses', () => {
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum.spec().get('/courses/1').expectStatus(400).expectBody({
+          statusCode: 400,
+          message: 'Validation failed (uuid is expected)',
+          error: 'Bad Request',
+        });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .get('/courses/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Course with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should update the selected course', async () => {
+        return pactum
+          .spec()
+          .patch('/courses/$S{courseId}')
+          .withBody({
+            name: 'Cálculo II',
+          })
+          .expectStatus(200)
+          .inspect()
+          .expectJsonMatch({
+            name: 'Cálculo II',
+          });
+      });
+    });
   });
 });
