@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -27,7 +31,7 @@ export class CoursesService {
       },
     });
     if (course === null) {
-      throw new BadRequestException(`Course with id ${id} not found`);
+      throw new NotFoundException(`Course with id ${id} not found`);
     }
     return course;
   }
