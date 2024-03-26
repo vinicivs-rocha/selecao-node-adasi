@@ -5,7 +5,11 @@ import { dataSourceOpts } from './data.source';
 import { StudentsModule } from './students/students.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSourceOpts), CoursesModule, StudentsModule],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOpts),
+    CoursesModule,
+    StudentsModule,
+  ],
   controllers: [],
   providers: [],
 })
