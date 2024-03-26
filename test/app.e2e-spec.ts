@@ -349,4 +349,34 @@ describe('App e2e', () => {
       });
     });
   });
+  describe('Tasks', () => {
+    describe('Create task', () => {
+      it('should respond with bad request when no data is provided', () => {
+        return pactum
+          .spec()
+          .post('/tasks')
+          .expectStatus(400)
+          .inspect()
+          .expectBody({
+            statusCode: 400,
+            message: ['name must be a string'],
+            error: 'Bad Request',
+          });
+      });
+      it('should create a task', async () => {
+        const newTask = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        return pactum
+          .spec()
+          .post('/tasks')
+          .withBody(newTask)
+          .expectStatus(201)
+          .expectJsonMatch({
+            name: newTask.name,
+          })
+          .stores('taskId', 'id');
+      });
+    });
+  });
 });
