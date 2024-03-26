@@ -5,7 +5,7 @@ import { Task } from 'src/tasks/domain/entities/task.entity';
 
 @Injectable()
 export class ListTasksOutputFactory implements IListTasksOutputFactory {
-  createListTasksOutput(task: Task): ListTasksOutput {
+  create(task: Task): ListTasksOutput {
     const { id, name } = task;
     return {
       id,
