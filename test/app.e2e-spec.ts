@@ -424,5 +424,35 @@ describe('App e2e', () => {
           });
       });
     });
+    describe('Delete tasks', () => {
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum.spec().delete('/tasks/1').expectStatus(400).expectBody({
+          statusCode: 400,
+          message: 'Validation failed (uuid is expected)',
+          error: 'Bad Request',
+        });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .delete('/tasks/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Task with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should delete the selected course', async () => {
+        return pactum
+          .spec()
+          .delete('/tasks/$S{taskId}')
+          .expectStatus(200)
+          .expectBody({
+            id: '$S{taskId}',
+          });
+      });
+    });
   });
 });
