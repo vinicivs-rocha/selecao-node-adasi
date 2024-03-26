@@ -57,7 +57,37 @@ describe('App e2e', () => {
             },
           ]);
       });
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum.spec().get('/courses/1').expectStatus(400).expectBody({
+          statusCode: 400,
+          message: 'Validation failed (uuid is expected)',
+          error: 'Bad Request',
+        });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .get('/courses/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Course with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should list the created course', async () => {
+        const newCourse = {
+          name: 'Cálculo I',
+        };
+        return pactum
+          .spec()
+          .get('/courses/$S{courseId}')
+          .expectStatus(200)
+          .expectJsonMatch(newCourse);
+      });
     });
+
     describe('Update courses', () => {
       it('should respond bad request when an invalid id is provided', async () => {
         return pactum.spec().patch('/courses/1').expectStatus(400).expectBody({
@@ -605,6 +635,70 @@ describe('App e2e', () => {
               'No tasks found with ids [00000000-0000-0000-0000-000000000000, 00000000-0000-0000-0000-000000000001]',
             error: 'Not Found',
           });
+      });
+    });
+    describe('List activities', () => {
+      it('should list all activities', async () => {
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31T08:00:00.000Z',
+          scheduledEnd: '2022-12-31T10:00:00.000Z',
+          actualStart: null,
+          actualEnd: null,
+          student: {
+            cpf: '$S{studentCpf}',
+            name: 'João da Silva',
+            registration: '123456',
+            course: {
+              id: '$S{courseId}',
+              name: 'Cálculo I',
+            },
+          },
+          tasks: [
+            {
+              id: '$S{taskId}',
+              name: 'Derivar a função f(x) = x²',
+            },
+          ],
+        };
+        return pactum
+          .spec()
+          .get('/activities')
+          .expectStatus(200)
+          .expectJsonMatch([activity]);
+      });
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum.spec().get('/activities/1').expectStatus(400).expectBody({
+          statusCode: 400,
+          message: 'Validation failed (uuid is expected)',
+          error: 'Bad Request',
+        });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .get('/activities/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Activity with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should list the created activity', async () => {
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        return pactum
+          .spec()
+          .get('/activities/$S{acticityId}')
+          .expectStatus(200)
+          .expectJsonMatch(activity);
       });
     });
   });
