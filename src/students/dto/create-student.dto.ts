@@ -1,4 +1,4 @@
-import { IsInt, IsString, Matches } from 'class-validator';
+import { IsString, IsUUID, Matches } from 'class-validator';
 
 export class CreateStudentDto {
   @IsString()
@@ -11,6 +11,6 @@ export class CreateStudentDto {
   @IsString()
   registration: string;
 
-  @IsInt()
+  @IsUUID()
   course_id: string;
 }
