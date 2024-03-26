@@ -4,6 +4,7 @@ import { CoursesModule } from './courses/courses.module';
 import { dataSourceOpts } from './data.source';
 import { StudentsModule } from './students/students.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { TasksModule } from './tasks/tasks.module';
     CoursesModule,
     StudentsModule,
     TasksModule,
+    ActivitiesModule,
   ],
   controllers: [],
   providers: [],
