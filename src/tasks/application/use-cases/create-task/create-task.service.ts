@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateTaskDto } from 'src/tasks/application/dto/create-task.dto';
 import { ICreateTaskRepository } from 'src/tasks/domain/repositories/create-task';
-import { CreateTaskOutput } from '../../interfaces/create-output';
 import { ICreateTaskOutputFactory } from '../../factories/create-output-factory';
+import { CreateTaskOutput } from './create.output';
 
 @Injectable()
 export class CreateTaskService {
