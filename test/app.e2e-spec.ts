@@ -479,12 +479,6 @@ describe('App e2e', () => {
             error: 'Bad Request',
           });
       });
-      it.todo(
-        'should respond with bad request when start and end time interval is too long',
-      );
-      it.todo(
-        'should respond with bad request when end time preceeds start time',
-      );
       it('should create an activity', async () => {
         const course = {
           name: 'Cálculo I',
@@ -507,6 +501,15 @@ describe('App e2e', () => {
           .withBody(student)
           .stores('studentCpf', 'cpf');
 
+        const task = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        await pactum
+          .spec()
+          .post('/tasks')
+          .withBody(task)
+          .stores('taskId', 'id');
+
         const activity = {
           date: '2022-12-31',
           scheduledStart: '2022-12-31 08:00:00',
@@ -521,6 +524,87 @@ describe('App e2e', () => {
           .expectStatus(201)
           .expectJsonMatch(activity)
           .stores('activityId', 'id');
+      });
+      it('should respond with bad request when start and end time interval is too long', async () => {
+        const sevenHoursActivity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 07:30:00',
+          scheduledEnd: '2022-12-31 14:30:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        return pactum
+          .spec()
+          .post('/activities')
+          .withBody(sevenHoursActivity)
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: "Activity's duration should not exceed 6 hours",
+            error: 'Bad Request',
+          });
+      });
+      it('should respond with bad request when end time preceeds start time', async () => {
+        const misScheduledActivity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 14:30:00',
+          scheduledEnd: '2022-12-31 07:30:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        return pactum
+          .spec()
+          .post('/activities')
+          .withBody(misScheduledActivity)
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message:
+              'End date and time should not be previous to start date and time',
+            error: 'Bad Request',
+          });
+      });
+      it("should respond with not found when student cpf doesn't exists", async () => {
+        const nonExistentStudentActivity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '000.000.000-00',
+          taskIds: ['$S{taskId}'],
+        };
+        return pactum
+          .spec()
+          .post('/activities')
+          .withBody(nonExistentStudentActivity)
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message: 'Student with cpf 000.000.000-00 not found',
+            error: 'Not Found',
+          });
+      });
+      it("should respond with not found when every task ids don't exists", async () => {
+        const nonExistentTaskActivity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: [
+            '00000000-0000-0000-0000-000000000000',
+            '00000000-0000-0000-0000-000000000001',
+          ],
+        };
+        return pactum
+          .spec()
+          .post('/activities')
+          .withBody(nonExistentTaskActivity)
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'No tasks found with ids [00000000-0000-0000-0000-000000000000, 00000000-0000-0000-0000-000000000001]',
+            error: 'Not Found',
+          });
       });
     });
   });
