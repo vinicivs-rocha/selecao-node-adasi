@@ -9,11 +9,11 @@ export class InitActivity1711465174247 implements MigrationInterface {
             scheduled_end TIMESTAMPTZ NOT NULL,
             actual_start TIMESTAMPTZ,
             actual_end TIMESTAMPTZ,
-            student_id uuid NOT NULL,
+            student_cpf VARCHAR(14) NOT NULL,
 
             CONSTRAINT "FK_ACTIVITY_STUDENT"
-                FOREIGN KEY (student_id)
-                REFERENCES "student" (id)
+                FOREIGN KEY (student_cpf)
+                REFERENCES "student" (cpf)
                 ON DELETE CASCADE
         )`);
   }

@@ -1,5 +1,3 @@
-import { Student } from 'src/students/entities/student.entity';
-import { Task } from 'src/tasks/domain/entities/task.entity';
 import {
   Column,
   Entity,
@@ -9,6 +7,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Student } from '../../../students/entities/student.entity';
+import { Task } from '../../../tasks/domain/entities/task.entity';
 
 @Entity()
 export class Activity {
@@ -19,19 +19,19 @@ export class Activity {
   date: string;
 
   @Column({ type: 'timestamptz', name: 'scheduled_start' })
-  scheduledStart: Date;
+  scheduledStart: string;
 
   @Column({ type: 'timestamptz', name: 'scheduled_end' })
-  scheduledEnd: Date;
+  scheduledEnd: string;
 
   @Column({ type: 'timestamptz', name: 'actual_start', nullable: true })
-  actualStart?: Date;
+  actualStart?: string;
 
   @Column({ type: 'timestamptz', name: 'actual_end', nullable: true })
-  actualEnd?: Date;
+  actualEnd?: string;
 
   @ManyToOne(() => Student)
-  @JoinColumn({ name: 'student_id' })
+  @JoinColumn({ name: 'student_cpf' })
   student: Student;
 
   @ManyToMany(() => Task)
