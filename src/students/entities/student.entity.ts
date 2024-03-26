@@ -1,9 +1,9 @@
-import { Course } from 'src/courses/entities/course.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Course } from '../../courses/entities/course.entity';
 
 @Entity()
 export class Student {
-  @Column({ unique: true })
+  @Column({ unique: true, primary: true })
   cpf: string;
 
   @Column()
@@ -12,6 +12,7 @@ export class Student {
   @Column({ unique: true })
   registration: string;
 
-  @OneToMany(() => Course, (course) => course.students)
+  @ManyToOne(() => Course, (course) => course.students)
+  @JoinColumn({ name: 'course_id' })
   course: Course;
 }

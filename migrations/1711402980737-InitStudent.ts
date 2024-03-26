@@ -8,8 +8,10 @@ export class InitStudent1711402980737 implements MigrationInterface {
                 name VARCHAR(255) NOT NULL,
                 registration VARCHAR(255) NOT NULL,
                 course_id uuid NOT NULL,
-                CONSTRAINT "FK_STUDENT_COURSE" FOREIGN KEY (course_id) REFERENCES course(id)
-                CONSTRAINT "UQ_STUDENT_REGISTRATION" UNIQUE (registration)
+                CONSTRAINT "FK_STUDENT_COURSE" FOREIGN KEY (course_id) 
+                  REFERENCES course(id)
+                  ON DELETE CASCADE,
+                CONSTRAINT "UQ_STUDENT_REGISTRATION" UNIQUE (registration),
                 CONSTRAINT "UQ_STUDENT_CPF" UNIQUE (cpf) 
             )`);
   }

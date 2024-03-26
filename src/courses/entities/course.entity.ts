@@ -1,5 +1,5 @@
-import { Student } from 'src/students/entities/student.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Student } from '../../students/entities/student.entity';
 
 @Entity()
 export class Course {
@@ -9,6 +9,8 @@ export class Course {
   @Column()
   name: string;
 
-  @OneToMany(() => Student, (student) => student.course)
+  @OneToMany(() => Student, (student) => student.course, {
+    onDelete: 'CASCADE',
+  })
   students: Student[];
 }
