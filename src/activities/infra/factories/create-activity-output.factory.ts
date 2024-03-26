@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { ICreateActivityOutputFactory } from 'src/activities/application/factories/create-activity-output-factory';
-import { CreateActivityOutput } from 'src/activities/application/use-cases/create-activity/create-activity.output';
-import { Activity } from 'src/activities/domain/entities/activity.entity';
+import { CreateActivityOutput } from '../../../activities/application/use-cases/create-activity/create-activity.output';
+import { Activity } from '../../../activities/domain/entities/activity.entity';
 
+@Injectable()
 export class CreateActivityOutputFactory
   implements ICreateActivityOutputFactory
 {
