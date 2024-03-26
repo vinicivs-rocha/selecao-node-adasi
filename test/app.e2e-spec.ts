@@ -378,5 +378,18 @@ describe('App e2e', () => {
           .stores('taskId', 'id');
       });
     });
+    describe('List tasks', () => {
+      it('should list all tasks', async () => {
+        return pactum
+          .spec()
+          .get('/tasks')
+          .expectStatus(200)
+          .expectJsonMatch([
+            {
+              name: 'Derivar a função f(x) = x²',
+            },
+          ]);
+      });
+    });
   });
 });
