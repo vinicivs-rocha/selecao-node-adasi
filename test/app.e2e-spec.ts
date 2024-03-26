@@ -129,7 +129,6 @@ describe('App e2e', () => {
           .spec()
           .post('/students')
           .expectStatus(400)
-          .inspect()
           .expectBody({
             statusCode: 400,
             message: [
@@ -328,7 +327,6 @@ describe('App e2e', () => {
           .spec()
           .post('/tasks')
           .expectStatus(400)
-          .inspect()
           .expectBody({
             statusCode: 400,
             message: ['name must be a string'],
@@ -452,6 +450,77 @@ describe('App e2e', () => {
           .expectBody({
             id: '$S{taskId}',
           });
+      });
+    });
+  });
+  describe('Activities', () => {
+    describe('Create activity', () => {
+      it('should respond with bad request when no data is provided', () => {
+        return pactum
+          .spec()
+          .post('/activities')
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: [
+              'date must be a valid ISO 8601 date string',
+              'date must be a string',
+              'scheduledStart must match /^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})([+-]\\d{2})?$/ regular expression',
+              'scheduledStart must be a string',
+              'scheduledEnd must match /^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})([+-]\\d{2})?$/ regular expression',
+              'scheduledEnd must be a string',
+              'studentCpf must match /^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$/ regular expression',
+              'studentCpf must be a string',
+              'taskIds must contain at least 1 elements',
+              'each value in taskIds must be a UUID',
+              'each value in taskIds must be a string',
+              'taskIds must be an array',
+            ],
+            error: 'Bad Request',
+          });
+      });
+      it.todo(
+        'should respond with bad request when start and end time interval is too long',
+      );
+      it.todo(
+        'should respond with bad request when end time preceeds start time',
+      );
+      it('should create an activity', async () => {
+        const course = {
+          name: 'Cálculo I',
+        };
+        await pactum
+          .spec()
+          .post('/courses')
+          .withBody(course)
+          .stores('courseId', 'id');
+
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        return pactum
+          .spec()
+          .post('/activities')
+          .withBody(activity)
+          .expectStatus(201)
+          .expectJsonMatch(activity)
+          .stores('activityId', 'id');
       });
     });
   });
