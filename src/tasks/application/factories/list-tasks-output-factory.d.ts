@@ -1,3 +1,3 @@
 export interface IListTasksOutputFactory {
-  createListTasksOutput(tasks: Task): ListTasksOutput;
+  create(tasks: Task): ListTasksOutput;
 }
