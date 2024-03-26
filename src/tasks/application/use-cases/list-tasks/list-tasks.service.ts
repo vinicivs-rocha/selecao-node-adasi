@@ -14,8 +14,6 @@ export class ListTasksService {
 
   async execute(): Promise<ListTasksOutput[]> {
     const tasks = await this.listTasksRepository.listTasks();
-    return tasks.map((task) =>
-      this.listTasksOutputFactory.createListTasksOutput(task),
-    );
+    return tasks.map((task) => this.listTasksOutputFactory.create(task));
   }
 }
