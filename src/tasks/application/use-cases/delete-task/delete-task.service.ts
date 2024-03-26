@@ -14,7 +14,6 @@ export class DeleteTaskService {
 
   async execute(id: string): Promise<DeleteTaskOutput> {
     const task = await this.deleteTaskRepository.delete(id);
-    console.log(this.deleteTaskOutputFactory.create(task));
     return this.deleteTaskOutputFactory.create(task);
   }
 }

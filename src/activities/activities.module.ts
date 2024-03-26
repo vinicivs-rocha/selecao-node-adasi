@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
+import { BadRequestException, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Student } from '../students/entities/student.entity';
+import { Task } from '../tasks/domain/entities/task.entity';
 import { CreateActivityService } from './application/use-cases/create-activity/create-activity.service';
 import { Activity } from './domain/entities/activity.entity';
 import { CreateActivityController } from './infra/controllers/create-activity/create-activity.controller';
 import { CreateActivityOutputFactory } from './infra/factories/create-activity-output.factory';
 import { CreateActivityRepository } from './infra/repositories/create-activity.repository';
-import { Student } from 'src/students/entities/student.entity';
-import { Task } from 'src/tasks/domain/entities/task.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Activity, Student, Task])],
@@ -17,6 +17,12 @@ import { Task } from 'src/tasks/domain/entities/task.entity';
     {
       provide: 'CreateActivityOutputFactory',
       useClass: CreateActivityOutputFactory,
+    },
+    {
+      provide: 'BadRequestException',
+      useFactory: () => {
+        return new BadRequestException();
+      },
     },
   ],
 })

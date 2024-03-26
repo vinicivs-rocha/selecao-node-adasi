@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Student } from 'src/students/entities/student.entity';
-import { Task } from 'src/tasks/domain/entities/task.entity';
 import { In, Repository } from 'typeorm';
+import { Student } from '../../../students/entities/student.entity';
+import { Task } from '../../../tasks/domain/entities/task.entity';
 import { CreateActivityDto } from '../../application/dto/create-activity.dto';
 import { Activity } from '../../domain/entities/activity.entity';
 import { ICreateActivityRepository } from '../../domain/repositories/create-activity';
