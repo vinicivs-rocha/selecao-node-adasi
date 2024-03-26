@@ -30,7 +30,7 @@ export class Activity {
   @Column({ type: 'timestamptz', name: 'actual_end', nullable: true })
   actualEnd?: Date;
 
-  @ManyToOne(() => Student, (student) => student.activities)
+  @ManyToOne(() => Student)
   @JoinColumn({ name: 'student_id' })
   student: Student;
 
