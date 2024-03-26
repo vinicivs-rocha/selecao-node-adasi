@@ -689,14 +689,30 @@ describe('App e2e', () => {
       it('should list the created activity', async () => {
         const activity = {
           date: '2022-12-31',
-          scheduledStart: '2022-12-31 08:00:00',
-          scheduledEnd: '2022-12-31 10:00:00',
-          studentCpf: '$S{studentCpf}',
-          taskIds: ['$S{taskId}'],
+          scheduledStart: '2022-12-31T08:00:00.000Z',
+          scheduledEnd: '2022-12-31T10:00:00.000Z',
+          actualStart: null,
+          actualEnd: null,
+          student: {
+            cpf: '$S{studentCpf}',
+            name: 'João da Silva',
+            registration: '123456',
+            course: {
+              id: '$S{courseId}',
+              name: 'Cálculo I',
+            },
+          },
+          tasks: [
+            {
+              id: '$S{taskId}',
+              name: 'Derivar a função f(x) = x²',
+            },
+          ],
         };
+
         return pactum
           .spec()
-          .get('/activities/$S{acticityId}')
+          .get('/activities/$S{activityId}')
           .expectStatus(200)
           .expectJsonMatch(activity);
       });
