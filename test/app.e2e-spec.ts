@@ -13,7 +13,7 @@ describe('App e2e', () => {
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
     await app.init();
     await app.listen(3333);
-    pactum.request.setBaseUrl('http://localhost:3333');
+    pactum.request.setBaseUrl('http://localhost:3333/v1');
   });
   afterAll(() => app.close());
 
