@@ -1,7 +1,7 @@
 import { IsDateString, IsString } from 'class-validator';
 
-export class StartActivityDto {
+export class EndActivityDto {
   @IsString()
   @IsDateString({ strict: true })
-  start: string;
+  end: string;
 }

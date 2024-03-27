@@ -1,7 +1,7 @@
 import {
   ArrayMinSize,
   IsArray,
-  IsISO8601,
+  IsDateString,
   IsString,
   IsUUID,
   Matches,
@@ -9,15 +9,15 @@ import {
 
 export class CreateActivityDto {
   @IsString()
-  @IsISO8601({ strict: true })
+  @IsDateString({ strict: true })
   date: string;
 
   @IsString()
-  @IsISO8601({ strict: true })
+  @IsDateString({ strict: true })
   scheduledStart: string;
 
   @IsString()
-  @IsISO8601({ strict: true })
+  @IsDateString({ strict: true })
   scheduledEnd: string;
 
   @IsString()
