@@ -495,9 +495,9 @@ describe('App e2e', () => {
             message: [
               'date must be a valid ISO 8601 date string',
               'date must be a string',
-              'scheduledStart must match /^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})([+-]\\d{2})?$/ regular expression',
+              'scheduledStart must be a valid ISO 8601 date string',
               'scheduledStart must be a string',
-              'scheduledEnd must match /^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})([+-]\\d{2})?$/ regular expression',
+              'scheduledEnd must be a valid ISO 8601 date string',
               'scheduledEnd must be a string',
               'studentCpf must match /^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$/ regular expression',
               'studentCpf must be a string',
@@ -870,6 +870,178 @@ describe('App e2e', () => {
           .expectStatus(200)
           .expectBody({
             id: '$S{activityId}',
+          });
+      });
+    });
+    describe('Start activity', () => {
+      it('should respond with bad request when no data is provided', async () => {
+        const course = {
+          name: 'Cálculo I',
+        };
+        await pactum
+          .spec()
+          .post('/courses')
+          .withBody(course)
+          .stores('courseId', 'id');
+
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const task = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        await pactum
+          .spec()
+          .post('/tasks')
+          .withBody(task)
+          .stores('taskId', 'id');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        await pactum
+          .spec()
+          .post('/activities')
+          .withBody(activity)
+          .stores('activityId', 'id');
+
+        return pactum
+          .spec()
+          .post('/activities/start/$S{activityId}')
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: [
+              'start must be a valid ISO 8601 date string',
+              'start must be a string',
+            ],
+            error: 'Bad Request',
+          });
+      });
+      it('should start an activity', async () => {
+        const course = {
+          name: 'Cálculo I',
+        };
+        await pactum
+          .spec()
+          .post('/courses')
+          .withBody(course)
+          .stores('courseId', 'id');
+
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const task = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        await pactum
+          .spec()
+          .post('/tasks')
+          .withBody(task)
+          .stores('taskId', 'id');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        await pactum
+          .spec()
+          .post('/activities')
+          .withBody(activity)
+          .stores('activityId', 'id');
+
+        const start = {
+          start: '2022-12-31T08:05:00.000Z',
+        };
+        await pactum
+          .spec()
+          .post('/activities/start/$S{activityId}')
+          .withBody(start)
+          .expectStatus(200)
+          .expectJsonMatch(start);
+      });
+      it('should respond with bad request when start time difference is too long', async () => {
+        const course = {
+          name: 'Cálculo I',
+        };
+        await pactum
+          .spec()
+          .post('/courses')
+          .withBody(course)
+          .stores('courseId', 'id');
+
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const task = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        await pactum
+          .spec()
+          .post('/tasks')
+          .withBody(task)
+          .stores('taskId', 'id');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        await pactum
+          .spec()
+          .post('/activities')
+          .withBody(activity)
+          .stores('activityId', 'id');
+
+        const tooLateStart = {
+          start: '2022-12-31 08:16:00',
+        };
+        return pactum
+          .spec()
+          .post('/activities/start/$S{activityId}')
+          .withBody(tooLateStart)
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message:
+              'The start time must have a maximum of 15 minutes difference from the scheduled start time',
+            error: 'Bad Request',
           });
       });
     });
