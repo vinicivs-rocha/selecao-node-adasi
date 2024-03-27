@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Activity } from '../../../activities/domain/entities/activity.entity';
 
@@ -10,5 +11,6 @@ export class Task {
   name: string;
 
   @ManyToMany(() => Activity)
+  @ApiProperty({ type: () => [Activity] })
   activities: Activity[];
 }
