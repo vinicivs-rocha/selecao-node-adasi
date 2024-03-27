@@ -717,7 +717,7 @@ describe('App e2e', () => {
           .expectJsonMatch(activity);
       });
     });
-    describe('Update activities', () => {
+    describe('Update activity', () => {
       it('should respond bad request when an invalid id is provided', async () => {
         return pactum
           .spec()
@@ -837,6 +837,40 @@ describe('App e2e', () => {
           })
           .expectStatus(200)
           .expectJsonMatch(activity);
+      });
+    });
+    describe('Delete activity', () => {
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum
+          .spec()
+          .delete('/activities/1')
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: 'Validation failed (uuid is expected)',
+            error: 'Bad Request',
+          });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .delete('/activities/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Activity with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should delete the selected activity', async () => {
+        return pactum
+          .spec()
+          .delete('/activities/$S{activityId}')
+          .expectStatus(200)
+          .expectBody({
+            id: '$S{activityId}',
+          });
       });
     });
   });
