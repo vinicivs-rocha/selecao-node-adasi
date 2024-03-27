@@ -13,11 +13,11 @@ export class CreateActivityDto {
   date: string;
 
   @IsString()
-  @Matches(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})([+-]\d{2})?$/)
+  @IsISO8601({ strict: true })
   scheduledStart: string;
 
   @IsString()
-  @Matches(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})([+-]\d{2})?$/)
+  @IsISO8601({ strict: true })
   scheduledEnd: string;
 
   @IsString()
