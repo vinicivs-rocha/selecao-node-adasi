@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Course } from '../../../courses/domain/entities/course.entity';
 
@@ -14,5 +15,6 @@ export class Student {
 
   @ManyToOne(() => Course, (course) => course.students)
   @JoinColumn({ name: 'course_id' })
+  @ApiProperty({ type: () => Course })
   course: Course;
 }

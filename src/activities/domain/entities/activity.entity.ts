@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -48,5 +49,6 @@ export class Activity {
       foreignKeyConstraintName: 'FK_ACTIVITY_TASKS_TASK',
     },
   })
+  @ApiProperty({ type: () => [Task] })
   tasks: Task[];
 }
