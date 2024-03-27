@@ -8,13 +8,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CoursesService } from './courses.service';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+import { CreateCourseDto } from '../../../application/dto/create-course.dto';
+import { UpdateCourseDto } from '../../../application/dto/update-course.dto';
+import { CrudService } from '../../../application/use-cases/crud/crud.service';
 
 @Controller('courses')
-export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+export class CrudController {
+  constructor(private readonly coursesService: CrudService) {}
 
   @Post()
   create(@Body() createCourseDto: CreateCourseDto) {

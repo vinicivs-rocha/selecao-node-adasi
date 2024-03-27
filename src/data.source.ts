@@ -1,6 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Activity } from './activities/domain/entities/activity.entity';
-import { Course } from './courses/entities/course.entity';
+import { Course } from './courses/domain/entities/course.entity';
 import { Student } from './students/entities/student.entity';
 import { Task } from './tasks/domain/entities/task.entity';
 
