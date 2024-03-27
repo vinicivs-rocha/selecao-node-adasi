@@ -11,8 +11,6 @@ export class CreateActivityService {
     private createActivityRepository: ICreateActivityRepository,
     @Inject('CreateActivityOutputFactory')
     private createActivityOutputFactory: ICreateActivityOutputFactory,
-    @Inject('BadRequestException')
-    private badRequestException: BadRequestException,
   ) {}
 
   async execute(newTask: CreateActivityDto): Promise<CreateActivityOutput> {

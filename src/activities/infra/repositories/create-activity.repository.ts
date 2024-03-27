@@ -30,9 +30,12 @@ export class CreateActivityRepository implements ICreateActivityRepository {
     const tasks = await this.tasksRepository.find({
       where: { id: In(newActivity.taskIds) },
     });
-    if (tasks.length === 0)
+    const diffTasks = newActivity.taskIds.filter(
+      (taskId) => tasks.find((task) => task.id === taskId) === undefined,
+    );
+    if (diffTasks.length > 0)
       throw new NotFoundException(
-        `No tasks found with ids [${newActivity.taskIds.join(', ')}]`,
+        `No tasks found with ids [${diffTasks.join(', ')}]`,
       );
     activity.tasks = tasks;
     return this.activitiesRepository.save(activity);

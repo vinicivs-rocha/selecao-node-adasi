@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Activity } from '../../../activities/domain/entities/activity.entity';
 
 @Entity()
 export class Task {
@@ -7,4 +8,7 @@ export class Task {
 
   @Column()
   name: string;
+
+  @ManyToMany(() => Activity)
+  activities: Activity[];
 }

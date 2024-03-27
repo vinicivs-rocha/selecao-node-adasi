@@ -61,9 +61,10 @@ export class StudentsService {
       throw new NotFoundException(`Student with cpf ${cpf} does not exists`);
 
     const updatedStudent = new Student();
-    updateStudentDto.cpf = updateStudentDto.cpf;
-    updateStudentDto.name = updateStudentDto.name;
-    updateStudentDto.registration = updateStudentDto.registration;
+    updatedStudent.cpf = updateStudentDto.cpf ?? student.cpf;
+    updatedStudent.name = updateStudentDto.name ?? student.name;
+    updatedStudent.registration =
+      updateStudentDto.registration ?? student.registration;
     if (updateStudentDto.course_id) {
       const course = await this.coursesRepository.findOne({
         where: {

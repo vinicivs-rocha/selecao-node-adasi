@@ -613,7 +613,7 @@ describe('App e2e', () => {
             error: 'Not Found',
           });
       });
-      it("should respond with not found when every task ids don't exists", async () => {
+      it("should respond with not found when some task ids don't exists", async () => {
         const nonExistentTaskActivity = {
           date: '2022-12-31',
           scheduledStart: '2022-12-31 08:00:00',
@@ -713,6 +713,61 @@ describe('App e2e', () => {
         return pactum
           .spec()
           .get('/activities/$S{activityId}')
+          .expectStatus(200)
+          .expectJsonMatch(activity);
+      });
+    });
+    describe('Update activities', () => {
+      it('should respond bad request when an invalid id is provided', async () => {
+        return pactum
+          .spec()
+          .patch('/activities/1')
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: 'Validation failed (uuid is expected)',
+            error: 'Bad Request',
+          });
+      });
+      it('should respond not found when a non-existent id is provided', async () => {
+        return pactum
+          .spec()
+          .patch('/activities/00000000-0000-0000-0000-000000000000')
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Activity with id 00000000-0000-0000-0000-000000000000 not found',
+            error: 'Not Found',
+          });
+      });
+      it('should update the selected activity', async () => {
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31T08:00:00.000Z',
+          scheduledEnd: '2022-12-31T10:00:00.000Z',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+
+        return pactum
+          .spec()
+          .patch('/activities/$S{activityId}')
+          .withBody({
+            studentCpf: '$S{studentCpf}',
+          })
           .expectStatus(200)
           .expectJsonMatch(activity);
       });
