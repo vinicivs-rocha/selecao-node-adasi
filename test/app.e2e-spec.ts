@@ -87,7 +87,6 @@ describe('App e2e', () => {
           .expectJsonMatch(newCourse);
       });
     });
-
     describe('Update courses', () => {
       it('should respond bad request when an invalid id is provided', async () => {
         return pactum.spec().patch('/courses/1').expectStatus(400).expectBody({
@@ -104,7 +103,7 @@ describe('App e2e', () => {
           .expectBody({
             statusCode: 404,
             message:
-              'Course with id 00000000-0000-0000-0000-000000000000 does not exists',
+              'Course with id 00000000-0000-0000-0000-000000000000 not found',
             error: 'Not Found',
           });
       });
@@ -137,7 +136,7 @@ describe('App e2e', () => {
           .expectBody({
             statusCode: 404,
             message:
-              'Course with id 00000000-0000-0000-0000-000000000000 does not exists',
+              'Course with id 00000000-0000-0000-0000-000000000000 not found',
             error: 'Not Found',
           });
       });
