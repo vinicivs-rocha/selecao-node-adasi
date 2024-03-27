@@ -20,12 +20,6 @@ export class StartActivityService {
     const startDifference =
       new Date(startDto.start).getTime() -
       new Date(activity.scheduledStart).getTime();
-    console.log(
-      startDifference,
-      new Date(startDto.start).getTime(),
-      new Date(activity.scheduledStart).getTime(),
-      activity.scheduledStart,
-    );
     if (startDifference < -900_000 || startDifference > 900_000)
       throw new BadRequestException(
         'The start time must have a maximum of 15 minutes difference from the scheduled start time',
