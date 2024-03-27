@@ -12,10 +12,6 @@ export class StartActivityRepository implements IStartActivityRepository {
   ) {}
 
   async start(id: string, start: string) {
-    const activity = (await this.activityRepository.findOne({
-      where: { id },
-    })) as Activity;
-    activity.actualStart = start;
-    await this.activityRepository.save(activity);
+    await this.activityRepository.update(id, { actualStart: start });
   }
 }
