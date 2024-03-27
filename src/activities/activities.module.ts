@@ -4,6 +4,7 @@ import { Student } from '../students/entities/student.entity';
 import { Task } from '../tasks/domain/entities/task.entity';
 import { CreateActivityService } from './application/use-cases/create-activity/create-activity.service';
 import { DeleteActivityService } from './application/use-cases/delete-activity/delete-activity.service';
+import { EndActivityService } from './application/use-cases/end-activity/end-activity.service';
 import { FindActivityService } from './application/use-cases/find-activity/find-activity.service';
 import { ListActivitiesService } from './application/use-cases/list-activities/list-activities.service';
 import { StartActivityService } from './application/use-cases/start-activity/start-activity.service';
@@ -11,6 +12,7 @@ import { UpdateActivityService } from './application/use-cases/update-activity/u
 import { Activity } from './domain/entities/activity.entity';
 import { CreateActivityController } from './infra/controllers/create-activity/create-activity.controller';
 import { DeleteActivityController } from './infra/controllers/delete-activity/delete-activity.controller';
+import { EndActivityController } from './infra/controllers/end-activity/end-activity.controller';
 import { FindActivityController } from './infra/controllers/find-activity/find-activity.controller';
 import { ListActivitiesController } from './infra/controllers/list-activities/list-activities.controller';
 import { StartActivityController } from './infra/controllers/start-activity/start-activity.controller';
@@ -27,6 +29,8 @@ import { FindActivityRepository } from './infra/repositories/find-activity.repos
 import { ListActivitiesRepository } from './infra/repositories/list-activities.repository';
 import { StartActivityRepository } from './infra/repositories/start-activity.repository';
 import { UpdateActivityRepository } from './infra/repositories/update-activity.repository';
+import { EndActivityOutputFactory } from './infra/factories/end-activity-output.factory';
+import { EndActivityRepository } from './infra/repositories/end-activity.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Activity, Student, Task])],
@@ -37,6 +41,7 @@ import { UpdateActivityRepository } from './infra/repositories/update-activity.r
     UpdateActivityController,
     DeleteActivityController,
     StartActivityController,
+    EndActivityController,
   ],
   providers: [
     CreateActivityService,
@@ -45,6 +50,7 @@ import { UpdateActivityRepository } from './infra/repositories/update-activity.r
     UpdateActivityService,
     DeleteActivityService,
     StartActivityService,
+    EndActivityService,
     { provide: 'CreateActivityRepository', useClass: CreateActivityRepository },
     {
       provide: 'CreateActivityOutputFactory',
@@ -89,6 +95,14 @@ import { UpdateActivityRepository } from './infra/repositories/update-activity.r
     {
       provide: 'StartActivityOutputFactory',
       useClass: StartActivityOutputFactory,
+    },
+    {
+      provide: 'EndActivityRepository',
+      useClass: EndActivityRepository,
+    },
+    {
+      provide: 'EndActivityOutputFactory',
+      useClass: EndActivityOutputFactory,
     },
   ],
 })
