@@ -741,6 +741,73 @@ describe('App e2e', () => {
             error: 'Not Found',
           });
       });
+      it('should respond with bad request when start and end time interval is too long', async () => {
+        const sevenHoursActivity = {
+          scheduledStart: '2022-12-31 07:30:00',
+          scheduledEnd: '2022-12-31 14:30:00',
+        };
+        return pactum
+          .spec()
+          .patch('/activities/$S{activityId}')
+          .withBody(sevenHoursActivity)
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: "Activity's duration should not exceed 6 hours",
+            error: 'Bad Request',
+          });
+      });
+      it('should respond with bad request when end time preceeds start time', async () => {
+        const misScheduledActivity = {
+          scheduledStart: '2022-12-31 14:30:00',
+          scheduledEnd: '2022-12-31 07:30:00',
+        };
+        return pactum
+          .spec()
+          .patch('/activities/$S{activityId}')
+          .withBody(misScheduledActivity)
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message:
+              'End date and time should not be previous to start date and time',
+            error: 'Bad Request',
+          });
+      });
+      it("should respond with not found when student cpf doesn't exists", async () => {
+        const nonExistentStudentActivity = {
+          studentCpf: '000.000.000-00',
+        };
+        return pactum
+          .spec()
+          .patch('/activities/$S{activityId}')
+          .withBody(nonExistentStudentActivity)
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message: 'Student with cpf 000.000.000-00 not found',
+            error: 'Not Found',
+          });
+      });
+      it("should respond with not found when some task ids don't exists", async () => {
+        const nonExistentTaskActivity = {
+          taskIds: [
+            '00000000-0000-0000-0000-000000000000',
+            '00000000-0000-0000-0000-000000000001',
+          ],
+        };
+        return pactum
+          .spec()
+          .patch('/activities/$S{activityId}')
+          .withBody(nonExistentTaskActivity)
+          .expectStatus(404)
+          .expectBody({
+            statusCode: 404,
+            message:
+              'Tasks with ids [00000000-0000-0000-0000-000000000000, 00000000-0000-0000-0000-000000000001] not found',
+            error: 'Not Found',
+          });
+      });
       it('should update the selected activity', async () => {
         const student = {
           cpf: '012.345.678-90',
