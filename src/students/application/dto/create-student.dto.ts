@@ -12,5 +12,5 @@ export class CreateStudentDto {
   registration: string;
 
   @IsUUID()
-  course_id: string;
+  courseId: string;
 }

@@ -7,14 +7,14 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
-import { CPFPipe } from './pipes/cpf.pipe';
-import { StudentsService } from './students.service';
+import { CreateStudentDto } from '../../../application/dto/create-student.dto';
+import { UpdateStudentDto } from '../../../application/dto/update-student.dto';
+import { CrudService } from '../../../application/use-cases/crud/crud.service';
+import { CPFPipe } from '../../../pipes/cpf.pipe';
 
 @Controller('students')
-export class StudentsController {
-  constructor(private readonly studentsService: StudentsService) {}
+export class CrudController {
+  constructor(private readonly studentsService: CrudService) {}
 
   @Post()
   create(@Body() createStudentDto: CreateStudentDto) {

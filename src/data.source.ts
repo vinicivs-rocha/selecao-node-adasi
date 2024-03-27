@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Activity } from './activities/domain/entities/activity.entity';
 import { Course } from './courses/domain/entities/course.entity';
-import { Student } from './students/entities/student.entity';
+import { Student } from './students/domain/entities/student.entity';
 import { Task } from './tasks/domain/entities/task.entity';
 
 export const dataSourceOpts: DataSourceOptions = {

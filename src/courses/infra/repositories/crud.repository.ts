@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateCourseDto } from '../../application/dto/create-course.dto';
 import { UpdateCourseDto } from '../../application/dto/update-course.dto';
 import { Course } from '../../domain/entities/course.entity';
-import { ICoursesCrudRepository } from 'src/courses/domain/repositories/crud';
+import { ICoursesCrudRepository } from '../../domain/repositories/crud';
 
 @Injectable()
 export class CoursesCrudRepository implements ICoursesCrudRepository {

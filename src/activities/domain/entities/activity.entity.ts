@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Student } from '../../../students/entities/student.entity';
+import { Student } from '../../../students/domain/entities/student.entity';
 import { Task } from '../../../tasks/domain/entities/task.entity';
 
 @Entity()
