@@ -21,7 +21,7 @@ export class UpdateActivityRepository implements IUpdateActivityRepository {
   async update(id: string, dto: UpdateActivityDto): Promise<Activity> {
     const activity = await this.activitiesRepository.findOne({
       where: { id },
-      relations: ['tasks'],
+      relations: ['tasks', 'student'],
     });
     if (activity === null)
       throw new NotFoundException(`Activity with id ${id} not found`);
@@ -55,7 +55,7 @@ export class UpdateActivityRepository implements IUpdateActivityRepository {
 
     activity.tasks = tasks;
 
-    await this.activitiesRepository.update(id, activity);
+    await this.activitiesRepository.save(activity);
     return activity;
   }
 }

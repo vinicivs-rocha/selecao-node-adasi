@@ -37,8 +37,16 @@ export class Activity {
   @ManyToMany(() => Task)
   @JoinTable({
     name: 'activity_tasks',
-    joinColumn: { name: 'activity_id' },
-    inverseJoinColumn: { name: 'task_id' },
+    joinColumn: {
+      name: 'activity_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'FK_ACTIVITY_TASKS_ACTIVITY',
+    },
+    inverseJoinColumn: {
+      name: 'task_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'FK_ACTIVITY_TASKS_TASK',
+    },
   })
   tasks: Task[];
 }
