@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ICrudRepository } from 'src/courses/domain/repositories/crud';
+import { ICoursesCrudRepository } from 'src/courses/domain/repositories/crud';
 import { Course } from '../../../domain/entities/course.entity';
 import { CreateCourseDto } from '../../dto/create-course.dto';
 import { UpdateCourseDto } from '../../dto/update-course.dto';
@@ -9,7 +9,8 @@ import { RemoveOutput } from './remove.output';
 @Injectable()
 export class CrudService {
   constructor(
-    @Inject('CrudRepository') private crudRepository: ICrudRepository,
+    @Inject('CoursesCrudRepository')
+    private crudRepository: ICoursesCrudRepository,
     @Inject('RemoveOutputFactory')
     private removeOutputFactory: IRemoveOutputFactory,
   ) {}

@@ -4,10 +4,10 @@ import { Repository } from 'typeorm';
 import { CreateCourseDto } from '../../application/dto/create-course.dto';
 import { UpdateCourseDto } from '../../application/dto/update-course.dto';
 import { Course } from '../../domain/entities/course.entity';
-import { ICrudRepository } from '../../domain/repositories/crud';
+import { ICoursesCrudRepository } from 'src/courses/domain/repositories/crud';
 
 @Injectable()
-export class CrudRepository implements ICrudRepository {
+export class CoursesCrudRepository implements ICoursesCrudRepository {
   constructor(
     @InjectRepository(Course)
     private coursesRepository: Repository<Course>,

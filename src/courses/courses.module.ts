@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CrudService } from './application/use-cases/crud/crud.service';
 import { Course } from './domain/entities/course.entity';
 import { CrudController } from './infra/controllers/crud/crud.controller';
-import { CrudRepository } from './infra/repositories/crud.repository';
 import { RemoveOutputFactory } from './infra/factories/remove-output.factory';
+import { CoursesCrudRepository } from './infra/repositories/crud.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Course])],
@@ -12,8 +12,8 @@ import { RemoveOutputFactory } from './infra/factories/remove-output.factory';
   providers: [
     CrudService,
     {
-      provide: 'CrudRepository',
-      useClass: CrudRepository,
+      provide: 'CoursesCrudRepository',
+      useClass: CoursesCrudRepository,
     },
     {
       provide: 'RemoveOutputFactory',

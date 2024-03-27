@@ -1,4 +1,4 @@
-export interface ICrudRepository {
+export interface ICoursesCrudRepository {
   create(courseDto: CreateCourseDto): Promise<Course>;
   list(): Promise<Course[]>;
   find(id: string): Promise<Course>;
