@@ -931,60 +931,6 @@ describe('App e2e', () => {
             error: 'Bad Request',
           });
       });
-      it('should start an activity', async () => {
-        const course = {
-          name: 'Cálculo I',
-        };
-        await pactum
-          .spec()
-          .post('/courses')
-          .withBody(course)
-          .stores('courseId', 'id');
-
-        const student = {
-          cpf: '012.345.678-90',
-          name: 'João da Silva',
-          registration: '123456',
-          course_id: '$S{courseId}',
-        };
-        await pactum
-          .spec()
-          .post('/students')
-          .withBody(student)
-          .stores('studentCpf', 'cpf');
-
-        const task = {
-          name: 'Derivar a função f(x) = x²',
-        };
-        await pactum
-          .spec()
-          .post('/tasks')
-          .withBody(task)
-          .stores('taskId', 'id');
-
-        const activity = {
-          date: '2022-12-31',
-          scheduledStart: '2022-12-31 08:00:00',
-          scheduledEnd: '2022-12-31 10:00:00',
-          studentCpf: '$S{studentCpf}',
-          taskIds: ['$S{taskId}'],
-        };
-        await pactum
-          .spec()
-          .post('/activities')
-          .withBody(activity)
-          .stores('activityId', 'id');
-
-        const start = {
-          start: '2022-12-31T08:05:00.000Z',
-        };
-        await pactum
-          .spec()
-          .post('/activities/start/$S{activityId}')
-          .withBody(start)
-          .expectStatus(200)
-          .expectJsonMatch(start);
-      });
       it('should respond with bad request when start time difference is too long', async () => {
         const course = {
           name: 'Cálculo I',
@@ -1041,6 +987,164 @@ describe('App e2e', () => {
             statusCode: 400,
             message:
               'The start time must have a maximum of 15 minutes difference from the scheduled start time',
+            error: 'Bad Request',
+          });
+      });
+      it('should start an activity', async () => {
+        const course = {
+          name: 'Cálculo I',
+        };
+        await pactum
+          .spec()
+          .post('/courses')
+          .withBody(course)
+          .stores('courseId', 'id');
+
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const task = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        await pactum
+          .spec()
+          .post('/tasks')
+          .withBody(task)
+          .stores('taskId', 'id');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        await pactum
+          .spec()
+          .post('/activities')
+          .withBody(activity)
+          .stores('activityId', 'id');
+
+        const start = {
+          start: '2022-12-31T08:05:00.000Z',
+        };
+        await pactum
+          .spec()
+          .post('/activities/start/$S{activityId}')
+          .withBody(start)
+          .expectStatus(200)
+          .expectJsonMatch({
+            startTime: start.start,
+          });
+      });
+    });
+    describe('End activity', () => {
+      it('should respond with bad request when no data is provided', async () => {
+        return pactum
+          .spec()
+          .post('/activities/end/$S{activityId}')
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: [
+              'end must be a valid ISO 8601 date string',
+              'end must be a string',
+            ],
+            error: 'Bad Request',
+          });
+      });
+      it('should respond with bad request when time preceeds start', async () => {
+        const end = {
+          end: '2022-12-31T08:00:00.000Z',
+        };
+        await pactum
+          .spec()
+          .post('/activities/end/$S{activityId}')
+          .withBody(end)
+          .expectStatus(400)
+          .expectJsonMatch({
+            statusCode: 400,
+            message: 'The end time must not preceed start time',
+            error: 'Bad Request',
+          });
+      });
+      it('should end an activity', async () => {
+        const end = {
+          end: '2022-12-31T08:10:00.000Z',
+        };
+        await pactum
+          .spec()
+          .post('/activities/end/$S{activityId}')
+          .withBody(end)
+          .expectStatus(200)
+          .expectJsonMatch({
+            endTime: end.end,
+          });
+      });
+      it('should respond with bad request when activity has not started', async () => {
+        const course = {
+          name: 'Cálculo I',
+        };
+        await pactum
+          .spec()
+          .post('/courses')
+          .withBody(course)
+          .stores('courseId', 'id');
+
+        const student = {
+          cpf: '012.345.678-90',
+          name: 'João da Silva',
+          registration: '123456',
+          course_id: '$S{courseId}',
+        };
+        await pactum
+          .spec()
+          .post('/students')
+          .withBody(student)
+          .stores('studentCpf', 'cpf');
+
+        const task = {
+          name: 'Derivar a função f(x) = x²',
+        };
+        await pactum
+          .spec()
+          .post('/tasks')
+          .withBody(task)
+          .stores('taskId', 'id');
+
+        const activity = {
+          date: '2022-12-31',
+          scheduledStart: '2022-12-31 08:00:00',
+          scheduledEnd: '2022-12-31 10:00:00',
+          studentCpf: '$S{studentCpf}',
+          taskIds: ['$S{taskId}'],
+        };
+        await pactum
+          .spec()
+          .post('/activities')
+          .withBody(activity)
+          .stores('activityId', 'id');
+
+        const notStartedEnd = {
+          end: '2022-12-31 08:16:00',
+        };
+        return pactum
+          .spec()
+          .post('/activities/end/$S{activityId}')
+          .withBody(notStartedEnd)
+          .expectStatus(400)
+          .expectBody({
+            statusCode: 400,
+            message: 'The activity has not started yet',
             error: 'Bad Request',
           });
       });
