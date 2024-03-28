@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMinSize,
   IsArray,
@@ -22,6 +23,7 @@ export class CreateActivityDto {
 
   @IsString()
   @Matches(/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/)
+  @ApiProperty({ pattern: '^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$' })
   studentCpf: string;
 
   @IsArray()

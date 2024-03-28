@@ -18,6 +18,7 @@ async function bootstrap() {
     .addTag('courses')
     .addTag('students')
     .addTag('tasks')
+    .addTag('activities')
     .addServer('http://localhost:3000/', 'Local server')
     .build();
   const document = SwaggerModule.createDocument(app, config);
