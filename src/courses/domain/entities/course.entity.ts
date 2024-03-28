@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Student } from '../../../students/domain/entities/student.entity';
 
@@ -13,6 +13,6 @@ export class Course {
   @OneToMany(() => Student, (student) => student.course, {
     onDelete: 'CASCADE',
   })
-  @ApiProperty({ type: () => [Student] })
+  @ApiHideProperty()
   students: Student[];
 }
