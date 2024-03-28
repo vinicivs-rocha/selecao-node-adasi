@@ -11,6 +11,7 @@ describe('App e2e', () => {
     }).compile();
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+    app.setGlobalPrefix('v1');
     await app.init();
     await app.listen(3333);
     pactum.request.setBaseUrl('http://localhost:3333/v1');
