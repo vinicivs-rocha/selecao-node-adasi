@@ -16,7 +16,7 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addTag('courses')
-    .addServer('http://localhost:3000/v1', 'Local server')
+    .addServer('http://localhost:3000/', 'Local server')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
