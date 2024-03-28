@@ -1,3 +1,5 @@
+import { FindTaskOutput } from 'src/tasks/application/use-cases/find-task/find-task.output';
+
 export class FindActivityOutput {
   id: string;
   date: string;
@@ -12,10 +14,7 @@ export class FindActivityOutput {
       name: string;
     };
   };
-  tasks: {
-    id: string;
-    name: string;
-  }[];
+  tasks: FindTaskOutput[];
   actualStart?: string;
   actualEnd?: string;
 }

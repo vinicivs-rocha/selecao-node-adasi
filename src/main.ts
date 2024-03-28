@@ -19,9 +19,7 @@ async function bootstrap() {
     .addServer('http://localhost:3000/v1', 'Local server')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document, {
-    url: 'http://localhost:3000/',
-  });
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(3000);
 }
